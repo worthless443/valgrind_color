@@ -991,7 +991,7 @@ void VG_(show_all_errors) (  Int verbosity, Bool xml )
    }
 
    /* We only get here if not printing XML. */
-   VG_(umsg)("ERROR SUMMARY: "
+   VG_(umsg_with_arg)(n_errs_found, "ERROR SUMMARY: "
              "%u errors from %u contexts (suppressed: %u from %u)\n",
              n_errs_found, n_err_contexts,
              n_errs_suppressed, n_supp_contexts );
@@ -1053,7 +1053,7 @@ void VG_(show_all_errors) (  Int verbosity, Bool xml )
    // reprint summary, so users don't have to scroll way up to find
    // the first printing
    if (any_supp || any_error)
-      VG_(umsg)("ERROR SUMMARY: "
+      VG_(umsg_with_arg)(n_errs_found, "ERROR SUMMARY: "
                 "%u errors from %u contexts (suppressed: %u from %u)\n",
                 n_errs_found, n_err_contexts, n_errs_suppressed,
                 n_supp_contexts );

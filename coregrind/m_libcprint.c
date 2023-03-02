@@ -1129,12 +1129,85 @@ void VG_(fmsg_unknown_option) ( const HChar* opt)
       VG_(exit)(1);
 }
 
-UInt VG_(umsg) ( const HChar* format, ... )
-{
+static int strlen__inter(const char *str) {
+	int i;
+	for(i=0;*(str+i);++i) if((unsigned int)*(str+i)>0xfff) break;
+	return i;
+}
+UInt VG_(umsg_with_arg)(int errcode, const HChar* _format, ... ) { // TODO very trival, make it compac
+	UInt count;	
+	va_list vargs;
+	va_start(vargs, _format);
+	if(errcode>0 && errcode < 2) {
+			VG_(vmessage)(Vg_UserMsg, "\033[0;31m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+	}
+	else if(errcode>2 && errcode < 10) {
+			VG_(vmessage)(Vg_UserMsg, "\033[1;31m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+	}
+	else if(errcode > 10) {
+			VG_(vmessage)(Vg_UserMsg, "\033[2;31m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+	}
+	else {
+			VG_(vmessage)(Vg_UserMsg, "\033[1;32m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+	}
+	va_end(vargs);
+	return count;
+}
+UInt VG_(umsg) ( const HChar* _format, ... ) // TODO very trival, make it compact
+{ 
+   int times = 0;
+   for(int i=0;i<strlen__inter(_format);++i) if(*(_format + i)=='%') ++times;
    UInt count;
    va_list vargs;
-   va_start(vargs,format);
-   count = VG_(vmessage) ( Vg_UserMsg, format, vargs );
+   va_start(vargs,_format);
+   switch(times) {
+	    case 0: 
+			VG_(vmessage)(Vg_UserMsg, "\033[1;33m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+	    case 1: 
+			VG_(vmessage)(Vg_UserMsg, "\033[1;32m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+	    case 2:
+			VG_(vmessage)(Vg_UserMsg, "\033[0;31m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+	    case 3:
+			VG_(vmessage)(Vg_UserMsg, "\033[1;34m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+		case 4:
+			VG_(vmessage)(Vg_UserMsg, "\033[0;31m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+		case 5:
+			VG_(vmessage)(Vg_UserMsg, "\033[1;35m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+		case 6:
+			VG_(vmessage)(Vg_UserMsg, "\033[1;35m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			break;
+		default:
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			break;
+   }
    va_end(vargs);
    return count;
 }

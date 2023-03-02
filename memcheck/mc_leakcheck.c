@@ -1781,7 +1781,7 @@ static void print_results(ThreadId tid, LeakCheckParams* lcp)
             VG_(umsg)("To see details of leaked memory, "
                       "give 'full' arg to leak_check\n");
          else
-            VG_(umsg)("Rerun with --leak-check=full to see details "
+            VG_(umsg)("fuck you:Rerun with --leak-check=full to see details "
                       "of leaked memory\n");
       }
       if (lcp->mode == LC_Full &&
