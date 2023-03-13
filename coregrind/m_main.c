@@ -887,8 +887,8 @@ else if VG_INT_CLOM(cloPD, arg, "--scheduling-quantum",
                  || ! VG_TDICT_CALL(tool_process_cmd_line_option, arg) )) {
       if (VG_(Clo_Mode)() == cloH)
          ;
-      //else if (VG_(Clo_Mode)() == cloP && !VG_(Clo_Recognised) ())
-         //VG_(fmsg_unknown_option)(arg);
+      else if (VG_(Clo_Mode)() == cloP && !VG_(Clo_Recognised) ())
+         VG_(fmsg_unknown_option)(arg);
       else if (VG_(Clo_Mode)() == cloD && !VG_(Clo_Recognised) ())
          VG_(umsg)("Ignoring dynamic change to unrecognised option %s\n", arg);
    }
