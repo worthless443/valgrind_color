@@ -1325,7 +1325,7 @@ static int read_file_asm(char *fn, char *buf) {
 
 int get_num() {
    char _f[100];
-   return read_file_asm_withname("fucker", _f);
+   return read_file_asm_withname(_COLOR_CONFIG_FILE, _f);
 }
 
 const UInt VG_(umsg) ( const HChar* _format, ... ) // TODO very trival, make it compact
@@ -1345,7 +1345,7 @@ const UInt VG_(umsg) ( const HChar* _format, ... ) // TODO very trival, make it 
 	    case 0: 
 			VG_(vmessage)(Vg_UserMsg, "\033[1;33m", vargs);
    			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
-			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+			//VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs); // casues no new line
 			break;
 	    case 1: 
 			VG_(vmessage)(Vg_UserMsg, "\033[1;32m", vargs);
@@ -1367,20 +1367,20 @@ const UInt VG_(umsg) ( const HChar* _format, ... ) // TODO very trival, make it 
    			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
 			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
 			break;
-		case 5:
-			VG_(vmessage)(Vg_UserMsg, "\033[1;35m", vargs);
-   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
-			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
-			break;
-		case 6:
-			VG_(vmessage)(Vg_UserMsg, "\033[1;35m", vargs);
-   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
-			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
-			break;
 		default:
    			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
 			break;
-   }
+	   }
+       if(times > 4 && times < 6)  {
+			VG_(vmessage)(Vg_UserMsg, "\033[1;35m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+	   }
+	   else if(times > 6)  {
+			VG_(vmessage)(Vg_UserMsg, "\033[1;36m", vargs);
+   			count = VG_(vmessage)( Vg_UserMsg, _format, vargs);
+			VG_(vmessage)(Vg_UserMsg, "\033[00m", vargs);
+	   }
 deflt:
    if(!n) goto col;
    count = VG_(vmessage)(Vg_UserMsg, _format, vargs);

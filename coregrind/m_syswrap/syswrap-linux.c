@@ -381,6 +381,7 @@ void VG_(main_thread_wrapper_NORETURN)(ThreadId tid)
                     "entering VG_(main_thread_wrapper_NORETURN)\n");
 
    sp = ML_(allocstack)(tid);
+
 #if defined(ENABLE_INNER_CLIENT_REQUEST)
    {
       // we must register the main thread stack before the call

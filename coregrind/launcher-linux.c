@@ -356,6 +356,7 @@ static const char *valgrind_lib = VG_LIBDIR;
 
 int main(int argc, char** argv, char** envp)
 {
+	int COLOR_UMSG_ = 0;
    int i, j, loglevel, r, _delim;
    const char *toolname = NULL;
    const char *clientname = NULL;
@@ -368,7 +369,6 @@ int main(int argc, char** argv, char** envp)
    char* new_line;
    char** new_env;
    char flag_buf[10];
-
    /* Start the debugging-log system ASAP.  First find out how many 
       "-d"s were specified.  This is a pre-scan of the command line.
       At the same time, look for the tool name. */

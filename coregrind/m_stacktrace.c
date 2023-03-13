@@ -44,6 +44,7 @@
 #include "pub_core_trampoline.h"
 #include "config.h"
 
+#include<macro.h>
 
 /*------------------------------------------------------------*/
 /*---                                                      ---*/
@@ -1642,8 +1643,10 @@ void VG_(apply_StackTrace)(
         DiEpoch ep, StackTrace ips, UInt n_ips
      )
 {
-   Int i;
-
+	char buf[10];
+   Int i,enable_color;
+   extern int read_file_asm_withname(char *,char*);
+   enable_color = read_file_asm_withname(_COLOR_CONFIG_FILE ,buf);
    vg_assert(n_ips > 0);
    if ( ! VG_(clo_show_below_main) ) {
       // Search (from the outer frame onwards) the appearance of "main"
@@ -1657,10 +1660,11 @@ void VG_(apply_StackTrace)(
             break;
       }
    }
-
-   for (i = 0; i < n_ips; i++)
-      // Act on the ip
+   for (i = 0; i < n_ips; i++) {
+   	  if(!enable_color) VG_(printf)("\033[1;31m");
       action(i, ep, ips[i], opaque);
+   	  if(!enable_color) VG_(printf)("\033[00m");
+   }
 }
 
 

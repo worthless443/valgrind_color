@@ -991,11 +991,13 @@ void VG_(show_all_errors) (  Int verbosity, Bool xml )
    }
 
    /* We only get here if not printing XML. */
+   
    VG_(umsg_with_arg)(n_errs_found, "ERROR SUMMARY: "
              "%u errors from %u contexts (suppressed: %u from %u)\n",
              n_errs_found, n_err_contexts,
              n_errs_suppressed, n_supp_contexts );
-
+	
+   VG_(umsg)("\n");
    if (!VG_(clo_show_error_list))
       return;
 
